@@ -1,22 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const useLocalStorage = (keyname, defaultValue) => {
-    const [data, setStateData] = useState();
+    const [data, setStateData] = useState(() => {
+        const item = localStorage.getItem(keyname);
+        return item ? JSON.parse(item) : defaultValue;
+    });
 
     const setData = (value) => {
-        localStorage.setItem(keyname, JSON.stringify(value));
+        value = value instanceof Function ? value(data) : value;
         setStateData(value);
+        localStorage.setItem(keyname, JSON.stringify(value));
     };
-
-    useEffect(() => {
-        let tmpData = JSON.parse(localStorage.getItem(keyname));
-        if (tmpData === null && defaultValue) {
-            tmpData = defaultValue;
-            localStorage.setItem(keyname, JSON.stringify(defaultValue));
-        }
-        setStateData(tmpData);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keyname]);
 
     return { data, setData };
 };

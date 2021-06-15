@@ -17,7 +17,7 @@ const ProductList = (props) => {
                     All Products
                 </button>
                 {categories.map((v) => (
-                    <button onClick={() => setSelectedCategory(v)} className="text-center capitalize border border-gray-600 py-2">
+                    <button key={v} onClick={() => setSelectedCategory(v)} className="text-center capitalize border border-gray-600 py-2">
                         {v}
                     </button>
                 ))}
